@@ -15,7 +15,8 @@ import type {
   DashboardStats,
 } from "@/types";
 
-const SHEET_ID = "1bbhkrbnnBJIck5qxAR13b96RfBn1aLtFfyio0rUgCRw";
+// ID da planilha vem do .env.local
+const SHEET_ID = process.env.GOOGLE_SHEET_ID || "";
 
 // Cache em memória por aba (TTL 30s para dev, 120s para prod)
 const CACHE_TTL = process.env.NODE_ENV === "production" ? 120_000 : 30_000;
@@ -74,6 +75,11 @@ function parseCSVLine(line: string): string[] {
 // FETCH DE ABA DO GOOGLE SHEETS
 // ==========================================
 async function fetchSheet(sheetName: string): Promise<Record<string, string>[]> {
+  if (!SHEET_ID) {
+    console.error("GOOGLE_SHEET_ID não configurado no .env.local");
+    return [];
+  }
+
   const now = Date.now();
   if (_cache[sheetName] && now - _cache[sheetName].ts < CACHE_TTL) {
     return _cache[sheetName].data;

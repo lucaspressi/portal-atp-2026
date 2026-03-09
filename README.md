@@ -45,12 +45,22 @@ cd portal-atp-2026
 npm install
 ```
 
-3. **Configure a planilha (opcional):**
-   
-   Por padrão, o sistema usa a planilha compartilhada. Para usar sua própria planilha, edite o arquivo `lib/google-sheets.ts` e altere:
-   ```typescript
-   const SHEET_ID = "1bbhkrbnnBJIck5qxAR13b96RfBn1aLtFfyio0rUgCRw"; // Sua planilha
+3. **Configure a planilha:**
+
+   Copie o arquivo de exemplo:
+   ```bash
+   cp .env.local.example .env.local
    ```
+
+   Edite `.env.local` e adicione o ID da sua planilha:
+   ```env
+   GOOGLE_SHEET_ID=1bbhkrbnnBJIck5qxAR13b96RfBn1aLtFfyio0rUgCRw
+   ```
+
+   > 💡 **Como encontrar o ID da planilha:**
+   > - Abra a planilha no Google Sheets
+   > - Copie o trecho entre `/d/` e `/edit` da URL:
+   > - `https://docs.google.com/spreadsheets/d/`**`SEU_ID_AQUI`**`/edit`
 
 4. **Execute em desenvolvimento:**
 ```bash
@@ -79,12 +89,16 @@ O sistema espera as seguintes abas no Google Sheets:
 
 1. Crie uma conta em [vercel.com](https://vercel.com)
 2. Importe o repositório GitHub
-3. O deploy será automático!
+3. **Configure a variável de ambiente:**
+   - Vá em "Settings" → "Environment Variables"
+   - Adicione: `GOOGLE_SHEET_ID` = `seu-id-da-planilha`
+4. O deploy será automático!
 
+Ou via CLI:
 ```bash
-# Ou via CLI:
 npm i -g vercel
 vercel --prod
+# Adicione a variável quando perguntado
 ```
 
 ## 🔐 Configurando sua própria planilha
@@ -92,7 +106,10 @@ vercel --prod
 1. Crie uma cópia da planilha modelo
 2. Compartilhe como **"Qualquer pessoa com o link pode ver"**
 3. Copie o ID da planilha (trecho entre `/d/` e `/edit` na URL)
-4. Substitua no arquivo `lib/google-sheets.ts`
+4. Adicione ao `.env.local`:
+   ```env
+   GOOGLE_SHEET_ID=seu-id-aqui
+   ```
 
 ## 📝 Scripts disponíveis
 
@@ -119,9 +136,12 @@ portal-atp-2026/
 ├── components/
 │   └── ui/                # Componentes shadcn/ui
 ├── lib/
-│   └── google-sheets.ts   # Integração com Sheets
+│   ├── google-sheets.ts   # Integração com Sheets
+│   └── utils.ts           # Utilitários
 ├── types/
 │   └── index.ts           # Tipos TypeScript
+├── .env.local             # Configurações locais (não commitado)
+├── .env.local.example     # Exemplo de configuração
 └── public/                # Assets estáticos
 ```
 
